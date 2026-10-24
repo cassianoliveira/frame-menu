@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu The Frame</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#0b0d12;overflow:hidden;width:100%;height:100%}
+button{font-family:inherit;outline:none}
+#root{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;font-family:'Inter',Arial,sans-serif;color:#fff;background:#0b0d12;transform-origin:0 0}
+.abs{position:absolute}
+.btn{border:0;cursor:pointer;color:#fff;transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease, background .22s ease}
+.hero-btn{height:72px;padding:0 48px;border-radius:36px;font-size:30px;font-weight:600;margin-right:24px}
+.card{position:relative;flex:none;width:326px;height:183px;padding:0;border-radius:20px;overflow:hidden;text-align:left;margin-right:24px}
+.tile{flex:none;width:196px;height:110px;padding:0 12px;border-radius:24px;font-size:28px;font-weight:700;line-height:1.15;text-align:center;display:flex;align-items:center;justify-content:center;margin-right:16px}
+.dim{opacity:.8}
+.lift{transform:scale(1.08) translateY(-6px);box-shadow:0 30px 60px rgba(0,0,0,.6);opacity:1;z-index:2}
+.shelf-title{font-size:30px;font-weight:600;color:#f2f4f8;margin-bottom:14px}
+.row{display:flex}
+</style>
+</head>
+<body>
+<div id="root">
+  <div class="abs" style="left:0;top:0;width:1920px;height:560px;background:linear-gradient(160deg,#1f2d42 0%,#4f6a88 48%,#b8c6d4 100%)">
+    <svg viewBox="0 0 1920 560" style="position:absolute;left:0;top:0;width:100%;height:100%" aria-hidden="true">
+      <polygon points="0,430 300,350 620,415 980,320 1320,410 1650,335 1920,390 1920,560 0,560" fill="#9fb2c6" opacity="0.55"/>
+      <polygon points="0,490 400,450 800,482 1250,435 1650,475 1920,450 1920,560 0,560" fill="#e8eef4"/>
+      <polygon points="1290,250 1230,380 1350,380" fill="#1f3040"/>
+      <polygon points="1290,305 1215,440 1365,440" fill="#1f3040"/>
+      <polygon points="1450,220 1385,350 1515,350" fill="#243749"/>
+      <polygon points="1450,280 1370,420 1530,420" fill="#243749"/>
+      <polygon points="1610,260 1550,375 1670,375" fill="#1f3040"/>
+      <polygon points="1610,315 1535,445 1685,445" fill="#1f3040"/>
+      <polygon points="1770,235 1710,355 1830,355" fill="#243749"/>
+      <polygon points="1770,290 1695,425 1845,425" fill="#243749"/>
+    </svg>
+    <div class="abs" style="left:0;top:0;right:0;bottom:0;background:linear-gradient(90deg,rgba(8,10,16,.9) 0%,rgba(8,10,16,.62) 44%,rgba(8,10,16,0) 80%)"></div>
+    <div class="abs" style="left:0;top:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(11,13,18,0) 68%,rgba(11,13,18,.96) 100%)"></div>
+  </div>
+
+  <div class="abs" style="left:0;top:0;width:1920px;height:90px;box-sizing:border-box;padding:0 96px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:28px;font-weight:700;width:260px">The Frame</div>
+    <div style="display:flex;align-items:center">
+      <div style="font-size:28px;font-weight:600;padding:10px 30px;border-radius:40px;background:rgba(255,255,255,.2);margin-right:12px">Início</div>
+      <div style="font-size:28px;font-weight:600;padding:10px 30px;color:#d5dbe4;margin-right:12px">Quadro</div>
+      <div style="font-size:28px;font-weight:600;padding:10px 30px;color:#d5dbe4;margin-right:12px">Apps</div>
+      <div style="font-size:28px;font-weight:600;padding:10px 30px;color:#d5dbe4">Ajustes</div>
+    </div>
+    <div id="clock" style="font-size:28px;font-weight:600;width:260px;text-align:right">12:49</div>
+  </div>
+
+  <div class="abs" style="left:96px;top:168px">
+    <div style="font-size:26px;font-weight:600;letter-spacing:.14em;color:#d5dbe4;margin-bottom:10px">AGORA NA TELA · MODO QUADRO</div>
+    <div style="font-size:92px;font-weight:700;line-height:1.08;margin-bottom:10px">Caçadores na Neve</div>
+    <div style="font-size:32px;color:#e6ebf2">Pieter Bruegel, o Velho · 1565 · Clássicos</div>
+    <div id="hero" class="row" style="margin-top:28px"></div>
+  </div>
+  <div class="abs" style="right:96px;top:476px;font-size:22px;color:#e6ebf2;padding:8px 20px;border-radius:20px;background:rgba(8,10,16,.6)">Rodízio: a cada 60 min · aleatório</div>
+
+  <div class="abs" style="left:96px;top:572px;width:1728px">
+    <div style="margin-bottom:56px">
+      <div class="shelf-title">Quadro</div>
+      <div id="quadro" class="row"></div>
+    </div>
+    <div class="row">
+      <div style="width:832px;margin-right:64px">
+        <div class="shelf-title">Meus apps</div>
+        <div id="apps" class="row"></div>
+      </div>
+      <div style="width:832px">
+        <div class="shelf-title">Entradas</div>
+        <div id="entradas" class="row"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="abs" style="left:960px;top:104px;display:none;font-size:26px;font-weight:600;padding:14px 30px;border-radius:36px;background:rgba(255,255,255,.94);color:#10131a;box-shadow:0 16px 40px rgba(0,0,0,.5);white-space:nowrap"></div>
+</div>
+
+<script>
+(function () {
+  var quadro = [
+    { name: 'Natal', sub: 'Ativa de 1/nov a 5/jan', a: '#6e1520', b: '#c4453a' },
+    { name: 'Clássicos', sub: 'Bruegel, Monet, Van Gogh', a: '#26354d', b: '#8ea3bb' },
+    { name: 'Aquarelas', sub: 'Guirlandas, visco, laços', a: '#3f5a48', b: '#b9c8a6' },
+    { name: 'Vilas de neve', sub: 'Casas, igreja e lago', a: '#101a33', b: '#33527f' },
+    { name: 'Minhas fotos', sub: 'Suas imagens', a: '#5a4a30', b: '#c2a46c' }
+  ];
+  var apps = [
+    { name: 'Netflix', a: '#2a2d3a', b: '#454b5f' },
+    { name: 'YouTube', a: '#33282c', b: '#574248' },
+    { name: 'Prime Video', a: '#1f3040', b: '#3a5670' },
+    { name: 'Disney+', a: '#232c4a', b: '#3d4d7c' }
+  ];
+  var entradas = [{ name: 'HDMI 1' }, { name: 'HDMI 2' }, { name: 'Espelhar celular' }, { name: 'Ajustes da TV' }];
+  var hero = [{ name: 'Próxima obra', primary: true }, { name: 'Fixar esta', primary: false }];
+  var baixo = apps.concat(entradas);
+  var rows = [hero, quadro, baixo];
+  var pos = { r: 1, c: 0 };
+  var els = [[], [], []];
+  var toastTimer = null;
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  hero.forEach(function (it, i) {
+    var b = el('button', 'btn hero-btn', it.name);
+    b.style.background = it.primary ? '#ffffff' : 'rgba(255,255,255,.22)';
+    b.style.color = it.primary ? '#10131a' : '#ffffff';
+    document.getElementById('hero').appendChild(b);
+    els[0][i] = b;
+  });
+  quadro.forEach(function (it, i) {
+    var b = el('button', 'btn card',
+      '<span style="position:absolute;left:0;top:0;right:0;bottom:0;background:linear-gradient(to top,rgba(6,8,14,.74) 0%,rgba(6,8,14,0) 64%)"></span>' +
+      '<span style="position:absolute;left:18px;right:18px;bottom:16px;display:block">' +
+      '<span style="display:block;font-size:28px;font-weight:700;line-height:1.15">' + it.name + '</span>' +
+      '<span style="display:block;font-size:22px;line-height:1.2;color:#e6ebf2;margin-top:2px">' + it.sub + '</span></span>');
+    b.style.background = 'linear-gradient(135deg,' + it.a + ',' + it.b + ')';
+    document.getElementById('quadro').appendChild(b);
+    els[1][i] = b;
+  });
+  apps.forEach(function (it, i) {
+    var b = el('button', 'btn tile', it.name);
+    b.style.background = 'linear-gradient(135deg,' + it.a + ',' + it.b + ')';
+    document.getElementById('apps').appendChild(b);
+    els[2][i] = b;
+  });
+  entradas.forEach(function (it, i) {
+    var b = el('button', 'btn tile', it.name);
+    b.style.fontWeight = '600';
+    document.getElementById('entradas').appendChild(b);
+    els[2][apps.length + i] = b;
+  });
+
+  els.forEach(function (lista, r) {
+    lista.forEach(function (b, c) {
+      b.addEventListener('click', function () { pos = { r: r, c: c }; draw(); pick(); });
+      b.addEventListener('mouseenter', function () { pos = { r: r, c: c }; draw(); });
+    });
+  });
+
+  function draw() {
+    var tint = '#5b7390';
+    if (pos.r === 1) tint = quadro[pos.c].b;
+    else if (pos.r === 2 && pos.c < apps.length) tint = apps[pos.c].b;
+    document.getElementById('root').style.background =
+      'radial-gradient(1400px 620px at 30% 88%, ' + tint + '40, transparent 70%), #0b0d12';
+    els.forEach(function (lista, r) {
+      lista.forEach(function (b, c) {
+        var f = (r === pos.r && c === pos.c);
+        var base = b.className.replace(/\s*(lift|dim)\b/g, '');
+        var isEntrada = (r === 2 && c >= apps.length);
+        var isHero = (r === 0);
+        b.className = base + (f ? ' lift' : (isHero ? '' : ' dim'));
+        if (isEntrada) b.style.background = f ? 'rgba(255,255,255,.26)' : 'rgba(255,255,255,.1)';
+      });
+    });
+  }
+
+  function pick() {
+    var t = document.getElementById('toast');
+    t.textContent = 'Abrir: ' + rows[pos.r][pos.c].name;
+    t.style.display = 'block';
+    t.style.marginLeft = (-t.offsetWidth / 2) + 'px';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.style.display = 'none'; }, 2200);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.keyCode, r = pos.r, c = pos.c, len = function (x) { return rows[x].length; };
+    if (k === 39) c = Math.min(c + 1, len(r) - 1);
+    else if (k === 37) c = Math.max(c - 1, 0);
+    else if (k === 40) { r = Math.min(r + 1, 2); c = Math.min(c, len(r) - 1); }
+    else if (k === 38) { r = Math.max(r - 1, 0); c = Math.min(c, len(r) - 1); }
+    else if (k === 13) { e.preventDefault(); pick(); return; }
+    else return;
+    e.preventDefault();
+    pos = { r: r, c: c };
+    draw();
+  });
+
+  function ajustar() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    var root = document.getElementById('root');
+    root.style.transform = 'scale(' + s + ')';
+    root.style.left = Math.max(0, (window.innerWidth - 1920 * s) / 2) + 'px';
+  }
+  window.addEventListener('resize', ajustar);
+
+  function relogio() {
+    var d = new Date();
+    var h = d.getHours(), m = d.getMinutes();
+    document.getElementById('clock').textContent = (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  setInterval(relogio, 30000);
+
+  ajustar();
+  relogio();
+  draw();
+})();
+</script>
+</body>
+</html>
