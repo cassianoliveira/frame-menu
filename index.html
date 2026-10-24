@@ -18,10 +18,12 @@ button{font-family:inherit;outline:none}
 .lift{transform:scale(1.08) translateY(-6px);box-shadow:0 30px 60px rgba(0,0,0,.6);opacity:1;z-index:2}
 .shelf-title{font-size:30px;font-weight:600;color:#f2f4f8;margin-bottom:14px}
 .row{display:flex}
+.glow{position:absolute;width:1500px;height:900px;left:0;top:0;opacity:0;pointer-events:none;transition:left .6s ease,top .6s ease,opacity .6s ease}
 </style>
 </head>
 <body>
 <div id="root">
+  <div id="glow0" class="glow"></div><div id="glow1" class="glow"></div>
   <div class="abs" style="left:0;top:0;width:1920px;height:560px;background:linear-gradient(160deg,#1f2d42 0%,#4f6a88 48%,#b8c6d4 100%)">
     <svg viewBox="0 0 1920 560" style="position:absolute;left:0;top:0;width:100%;height:100%" aria-hidden="true">
       <polygon points="0,430 300,350 620,415 980,320 1320,410 1650,335 1920,390 1920,560 0,560" fill="#9fb2c6" opacity="0.55"/>
@@ -145,12 +147,33 @@ button{font-family:inherit;outline:none}
     });
   });
 
+  var glowAtivo = 0;
+  function moverBrilho(tint) {
+    var root = document.getElementById('root');
+    var rr = root.getBoundingClientRect();
+    var s = rr.width / 1920 || 1;
+    var f = els[pos.r][pos.c].getBoundingClientRect();
+    var cx = (f.left + f.width / 2 - rr.left) / s;
+    var cy = (f.top + f.height / 2 - rr.top) / s;
+    glowAtivo = 1 - glowAtivo;
+    for (var i = 0; i < 2; i++) {
+      var g = document.getElementById('glow' + i);
+      g.style.left = (cx - 750) + 'px';
+      g.style.top = (cy - 450) + 'px';
+      if (i === glowAtivo) {
+        g.style.background = 'radial-gradient(closest-side, ' + tint + 'a6 0%, ' + tint + '4d 45%, rgba(0,0,0,0) 100%)';
+        g.style.opacity = '1';
+      } else {
+        g.style.opacity = '0';
+      }
+    }
+  }
+
   function draw() {
     var tint = '#5b7390';
     if (pos.r === 1) tint = quadro[pos.c].b;
     else if (pos.r === 2 && pos.c < apps.length) tint = apps[pos.c].b;
-    document.getElementById('root').style.background =
-      'radial-gradient(1400px 620px at 30% 88%, ' + tint + '40, transparent 70%), #0b0d12';
+    moverBrilho(tint);
     els.forEach(function (lista, r) {
       lista.forEach(function (b, c) {
         var f = (r === pos.r && c === pos.c);
@@ -159,6 +182,7 @@ button{font-family:inherit;outline:none}
         var isHero = (r === 0);
         b.className = base + (f ? ' lift' : (isHero ? '' : ' dim'));
         if (isEntrada) b.style.background = f ? 'rgba(255,255,255,.26)' : 'rgba(255,255,255,.1)';
+        b.style.boxShadow = f ? '0 30px 70px ' + tint + '99, 0 10px 30px rgba(0,0,0,.5)' : '';
       });
     });
   }
