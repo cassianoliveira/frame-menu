@@ -37,6 +37,7 @@ button{font-family:inherit;outline:none}
       <polygon points="1770,235 1710,355 1830,355" fill="#243749"/>
       <polygon points="1770,290 1695,425 1845,425" fill="#243749"/>
     </svg>
+    <div id="heroimg" class="abs" style="left:0;top:0;right:0;bottom:0;background-size:cover;background-position:center;opacity:0;transition:opacity .8s ease"></div>
     <div class="abs" style="left:0;top:0;right:0;bottom:0;background:linear-gradient(90deg,rgba(8,10,16,.9) 0%,rgba(8,10,16,.62) 44%,rgba(8,10,16,0) 80%)"></div>
     <div class="abs" style="left:0;top:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(11,13,18,0) 68%,rgba(11,13,18,.96) 100%)"></div>
   </div>
@@ -53,12 +54,12 @@ button{font-family:inherit;outline:none}
   </div>
 
   <div class="abs" style="left:96px;top:168px">
-    <div style="font-size:26px;font-weight:600;letter-spacing:.14em;color:#d5dbe4;margin-bottom:10px">AGORA NA TELA · MODO QUADRO</div>
-    <div style="font-size:92px;font-weight:700;line-height:1.08;margin-bottom:10px">Caçadores na Neve</div>
-    <div style="font-size:32px;color:#e6ebf2">Pieter Bruegel, o Velho · 1565 · Clássicos</div>
+    <div id="h-kicker" style="font-size:26px;font-weight:600;letter-spacing:.14em;color:#d5dbe4;margin-bottom:10px">AGORA NA TELA · MODO QUADRO</div>
+    <div id="h-titulo" style="font-size:92px;font-weight:700;line-height:1.08;margin-bottom:10px;max-width:1500px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Caçadores na Neve</div>
+    <div id="h-sub" style="font-size:32px;color:#e6ebf2">Pieter Bruegel, o Velho · 1565 · Clássicos</div>
     <div id="hero" class="row" style="margin-top:28px"></div>
   </div>
-  <div class="abs" style="right:96px;top:476px;font-size:22px;color:#e6ebf2;padding:8px 20px;border-radius:20px;background:rgba(8,10,16,.6)">Rodízio: a cada 60 min · aleatório</div>
+  <div class="abs" style="right:96px;top:476px;font-size:22px;color:#e6ebf2;padding:8px 20px;border-radius:20px;background:rgba(8,10,16,.6)"><span id="h-rodizio">Rodízio: a cada 60 min · aleatório</span></div>
 
   <div class="abs" style="left:96px;top:572px;width:1728px">
     <div style="margin-bottom:56px">
@@ -67,7 +68,7 @@ button{font-family:inherit;outline:none}
     </div>
     <div class="row">
       <div style="width:832px;margin-right:64px">
-        <div class="shelf-title">Meus apps</div>
+        <div class="shelf-title">Meus apps<span style="font-size:20px;font-weight:400;color:#9aa4b2;margin-left:18px">segure OK para trocar</span></div>
         <div id="apps" class="row"></div>
       </div>
       <div style="width:832px">
@@ -83,18 +84,25 @@ button{font-family:inherit;outline:none}
 <script>
 (function () {
   var quadro = [
-    { name: 'Natal', sub: 'Ativa de 1/nov a 5/jan', a: '#6e1520', b: '#c4453a' },
-    { name: 'Clássicos', sub: 'Bruegel, Monet, Van Gogh', a: '#26354d', b: '#8ea3bb' },
-    { name: 'Aquarelas', sub: 'Guirlandas, visco, laços', a: '#3f5a48', b: '#b9c8a6' },
-    { name: 'Vilas de neve', sub: 'Casas, igreja e lago', a: '#101a33', b: '#33527f' },
-    { name: 'Minhas fotos', sub: 'Suas imagens', a: '#5a4a30', b: '#c2a46c' }
+    { id: 'natal', name: 'Natal', sub: 'Ativa de 1/nov a 5/jan', a: '#6e1520', b: '#c4453a' },
+    { id: 'classicos', name: 'Clássicos', sub: 'Bruegel, Monet, Van Gogh', a: '#26354d', b: '#8ea3bb' },
+    { id: 'aquarelas', name: 'Aquarelas', sub: 'Guirlandas, visco, laços', a: '#3f5a48', b: '#b9c8a6' },
+    { id: 'vilas', name: 'Vilas de neve', sub: 'Casas, igreja e lago', a: '#101a33', b: '#33527f' },
+    { id: 'fotos', name: 'Minhas fotos', sub: 'Suas imagens', a: '#5a4a30', b: '#c2a46c' }
   ];
-  var apps = [
-    { name: 'Netflix', a: '#2a2d3a', b: '#454b5f' },
-    { name: 'YouTube', a: '#33282c', b: '#574248' },
-    { name: 'Prime Video', a: '#1f3040', b: '#3a5670' },
-    { name: 'Disney+', a: '#232c4a', b: '#3d4d7c' }
-  ];
+  var COR_APP = {
+    stremio: ['#2a2144', '#5a3f8f'], youtube: ['#33282c', '#574248'], 'apple tv': ['#262a30', '#4a515c'],
+    spotify: ['#16301f', '#2f6b46'], netflix: ['#2e1418', '#5a2a30'], 'prime video': ['#1f3040', '#3a5670'],
+    'disney+': ['#232c4a', '#3d4d7c']
+  };
+  function corDe(nome) { return COR_APP[(nome || '').toLowerCase()] || ['#2a2d3a', '#454b5f']; }
+  function novoApp(nome, id) { var c = corDe(nome); return { name: nome, id: id || '', a: c[0], b: c[1] }; }
+  var PADRAO = ['Stremio', 'YouTube', 'Apple TV', 'Spotify'];
+  var apps = PADRAO.map(function (n) { return novoApp(n); });
+  try {
+    var salvos = JSON.parse(localStorage.getItem('frame.apps') || 'null');
+    if (salvos && salvos.length === 4) apps = salvos.map(function (x) { return novoApp(x.name, x.id); });
+  } catch (e) {}
   var entradas = [{ name: 'HDMI 1' }, { name: 'HDMI 2' }, { name: 'Espelhar celular' }, { name: 'Ajustes da TV' }];
   var hero = [{ name: 'Próxima obra', primary: true }, { name: 'Fixar esta', primary: false }];
   var baixo = apps.concat(entradas);
@@ -142,7 +150,7 @@ button{font-family:inherit;outline:none}
 
   els.forEach(function (lista, r) {
     lista.forEach(function (b, c) {
-      b.addEventListener('click', function () { pos = { r: r, c: c }; draw(); pick(); });
+      b.addEventListener('click', function () { pos = { r: r, c: c }; draw(); acionar(); });
       b.addEventListener('mouseenter', function () { pos = { r: r, c: c }; draw(); });
     });
   });
@@ -170,8 +178,8 @@ button{font-family:inherit;outline:none}
   }
 
   function draw() {
-    var tint = '#5b7390';
-    if (pos.r === 1) tint = quadro[pos.c].b;
+    var tint = (pos.r === 0 && corAgora) ? corAgora : '#5b7390';
+    if (pos.r === 1) tint = quadro[pos.c].cor || quadro[pos.c].b;
     else if (pos.r === 2 && pos.c < apps.length) tint = apps[pos.c].b;
     moverBrilho(tint);
     els.forEach(function (lista, r) {
@@ -198,15 +206,34 @@ button{font-family:inherit;outline:none}
 
   document.addEventListener('keydown', function (e) {
     var k = e.keyCode, r = pos.r, c = pos.c, len = function (x) { return rows[x].length; };
+    if (seletor) { e.preventDefault(); teclaSeletor(k); return; }
+    if (k === 405 && pos.r === 2 && pos.c < apps.length) { e.preventDefault(); abrirSeletor(pos.c); return; }
     if (k === 39) c = Math.min(c + 1, len(r) - 1);
     else if (k === 37) c = Math.max(c - 1, 0);
     else if (k === 40) { r = Math.min(r + 1, 2); c = Math.min(c, len(r) - 1); }
     else if (k === 38) { r = Math.max(r - 1, 0); c = Math.min(c, len(r) - 1); }
-    else if (k === 13) { e.preventDefault(); pick(); return; }
+    else if (k === 13) {
+      e.preventDefault();
+      if (pos.r === 2 && pos.c < apps.length) {
+        if (!enterDown) {
+          enterDown = true; enterLongo = false;
+          enterTimer = setTimeout(function () { enterLongo = true; abrirSeletor(pos.c); }, 800);
+        }
+      } else acionar();
+      return;
+    }
+    else if (k === 10009) { e.preventDefault(); sair(); return; }
     else return;
     e.preventDefault();
     pos = { r: r, c: c };
     draw();
+  });
+
+  document.addEventListener('keyup', function (e) {
+    if (e.keyCode !== 13 || !enterDown) return;
+    enterDown = false;
+    if (enterTimer) clearTimeout(enterTimer);
+    if (!enterLongo && !seletor) acionar();
   });
 
   function ajustar() {
@@ -224,9 +251,283 @@ button{font-family:inherit;outline:none}
   }
   setInterval(relogio, 30000);
 
+
+  // ---------------------------------------------------------------- servidor do Mac (artes reais)
+  var corAgora = '';
+  var SERVIDOR = (location.search.match(/[?&]srv=([^&]+)/) || [0, 'http://192.168.86.63:8765'])[1];
+  var avisouServidor = false;
+
+  function chamarServidor(caminho, ok, falha) {
+    var x = new XMLHttpRequest();
+    x.open('GET', SERVIDOR + caminho, true);
+    x.timeout = 30000;
+    x.onload = function () {
+      try { ok(JSON.parse(x.responseText)); } catch (e) { if (falha) falha(); }
+    };
+    x.onerror = x.ontimeout = function () { if (falha) falha(); };
+    x.send();
+  }
+
+  function servidorForaDoAr() {
+    if (avisouServidor) return;
+    avisouServidor = true;
+    document.getElementById('h-rodizio').textContent = 'Servidor do Mac fora do ar';
+  }
+
+  function mostrarAgora(d) {
+    if (!d || d.erro) { if (d && d.erro) aviso(d.erro); return; }
+    document.getElementById('h-titulo').textContent = d.titulo || 'Obra da TV';
+    document.getElementById('h-sub').textContent = [d.autor, d.colecao].filter(Boolean).join(' · ');
+    corAgora = d.cor || '';
+    if (d.imagem) {
+      var im = new Image();
+      im.onload = function () {
+        var h = document.getElementById('heroimg');
+        h.style.backgroundImage = 'url(' + SERVIDOR + d.imagem + ')';
+        h.style.opacity = '1';
+        var svg = document.querySelector('#root svg');
+        if (svg) svg.style.display = 'none';
+        draw();
+      };
+      im.src = SERVIDOR + d.imagem;
+    }
+    draw();
+  }
+
+  function carregarAgora() {
+    chamarServidor('/api/agora', function (d) { avisouServidor = false; mostrarAgora(d); }, servidorForaDoAr);
+  }
+
+  function carregarColecoes() {
+    chamarServidor('/api/colecoes', function (lista) {
+      avisouServidor = false;
+      lista.forEach(function (c) {
+        for (var i = 0; i < quadro.length; i++) {
+          if (quadro[i].id !== c.id) continue;
+          quadro[i].cor = c.cor || '';
+          if (c.capa) {
+            els[1][i].style.background = "url('" + SERVIDOR + c.capa + "') center/cover, " + quadro[i].a;
+          }
+        }
+      });
+      draw();
+    }, servidorForaDoAr);
+  }
+
+  // ---------------------------------------------------------------- apps e entradas da TV
+  var instalados = [];
+  function carregarApps() {
+    try {
+      tizen.application.getAppsInfo(function (lista) { instalados = lista || []; }, function () {});
+    } catch (e) {}
+  }
+
+  function achar(padroes) {
+    for (var p = 0; p < padroes.length; p++) {
+      for (var i = 0; i < instalados.length; i++) {
+        var a = instalados[i];
+        if (padroes[p].test(a.name || '') || padroes[p].test(a.id || '')) return a.id;
+      }
+    }
+    return null;
+  }
+
+  var CONHECIDOS = {
+    'Netflix': { re: [/^netflix$/i, /netflix/i], ids: ['org.tizen.netflix-app', 'RN1MCdNq8t.Netflix'] },
+    'YouTube': { re: [/^youtube$/i, /TizenYouTube$/i, /^youtube(?!.*(kids|tv|music))/i], ids: ['9Ur5IzDKqV.TizenYouTube'] },
+    'Prime Video': { re: [/prime ?video/i, /amazon/i], ids: ['evKhCgZelL.AmazonIgnitionLauncher2', 'org.tizen.primevideo'] },
+    'Disney+': { re: [/disney/i], ids: [] },
+    'Stremio': { re: [/stremio/i], ids: [] },
+    'Apple TV': { re: [/^apple ?tv/i, /appletv/i], ids: [] },
+    'Spotify': { re: [/spotify/i], ids: ['rJeHak5zRg.Spotify'] },
+    'Espelhar celular': { re: [/screen ?mirroring|smart ?view|espelh/i, /airplay/i, /smart ?things/i], ids: [] }
+  };
+
+  function lancar(ids, i, nome) {
+    if (i >= ids.length) { aviso('Não consegui abrir ' + nome + ' nesta TV'); return; }
+    try {
+      tizen.application.launch(ids[i], function () {}, function () { lancar(ids, i + 1, nome); });
+    } catch (e) {
+      aviso(typeof tizen === 'undefined' ? 'Isto só abre apps dentro da TV' : 'Erro ao abrir ' + nome);
+    }
+  }
+
+  function abrirApp(nome, idEscolhido) {
+    var c = CONHECIDOS[nome] || { re: [], ids: [] };
+    var ids = [];
+    if (idEscolhido) ids.push(idEscolhido);
+    if (!idEscolhido && !CONHECIDOS[nome]) { var pelo = achar([new RegExp('^' + nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i')]); if (pelo) ids.push(pelo); }
+    var achado = achar(c.re);
+    if (achado && ids.indexOf(achado) < 0) ids.push(achado);
+    c.ids.forEach(function (x) { if (ids.indexOf(x) < 0) ids.push(x); });
+    if (!ids.length) { aviso(nome + ' não está instalado nesta TV'); return; }
+    aviso('Abrindo ' + nome + '...');
+    lancar(ids, 0, nome);
+  }
+
+  function abrirHdmi(n) {
+    try {
+      tizen.systeminfo.getPropertyValue('VIDEOSOURCE', function (v) {
+        var todas = ((v && v.connected) || []).concat((v && v.disconnected) || []);
+        var fonte = null;
+        for (var i = 0; i < todas.length; i++) if (todas[i].type === 'HDMI' && todas[i].number === n) fonte = todas[i];
+        if (!fonte) { aviso('HDMI ' + n + ' não encontrada'); return; }
+        try {
+          tizen.tvwindow.setSource(fonte, function () {
+            tizen.application.launch('org.tizen.tv-viewer', function () {}, function () {});
+          }, function () { aviso('A TV recusou trocar para HDMI ' + n); });
+        } catch (e) { aviso('Sem permissão para trocar de entrada aqui'); }
+      }, function () { aviso('A TV não informou as entradas'); });
+    } catch (e) { aviso('Sem permissão para trocar de entrada aqui'); }
+  }
+
+  function abrirAjustes() {
+    function menu() { lancar(['org.tizen.menu'], 0, 'os ajustes'); }
+    try {
+      var ctl = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/setting', null, null, null, []);
+      tizen.application.launchAppControl(ctl, null, function () {}, menu);
+    } catch (e) { menu(); }
+  }
+
+  function sair() {
+    try { tizen.application.getCurrentApplication().exit(); } catch (e) { history.back(); }
+  }
+
+  // ---------------------------------------------------------------- o que cada botão faz
+  function aviso(txt) {
+    var t = document.getElementById('toast');
+    t.textContent = txt;
+    t.style.display = 'block';
+    t.style.marginLeft = (-t.offsetWidth / 2) + 'px';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.style.display = 'none'; }, 2800);
+  }
+
+  function acionar() {
+    var nome = rows[pos.r][pos.c].name;
+    if (pos.r === 0) {
+      if (pos.c === 0) {
+        aviso('Trocando de obra...');
+        chamarServidor('/api/proxima', mostrarAgora, function () { aviso('Servidor do Mac fora do ar'); });
+      } else {
+        chamarServidor('/api/fixar', function (d) {
+          if (d.erro) { aviso(d.erro); return; }
+          var h = document.getElementById('h-rodizio');
+          h.textContent = d.fixada ? 'Obra fixada · rodízio desligado' : 'Rodízio: a cada 60 min · aleatório';
+          aviso(d.fixada ? 'Obra fixada' : 'Rodízio ligado');
+        }, function () { aviso('Servidor do Mac fora do ar'); });
+      }
+    } else if (pos.r === 1) {
+      aviso('Mostrando: ' + nome);
+      chamarServidor('/api/mostrar?id=' + quadro[pos.c].id, mostrarAgora, function () { aviso('Servidor do Mac fora do ar'); });
+    } else if (nome === 'HDMI 1') abrirHdmi(1);
+    else if (nome === 'HDMI 2') abrirHdmi(2);
+    else if (nome === 'Ajustes da TV') abrirAjustes();
+    else abrirApp(nome, pos.r === 2 && pos.c < apps.length ? apps[pos.c].id : '');
+  }
+
+
+  // ---------------------------------------------------------------- escolher os apps de "Meus apps"
+  var OCULTOS = new RegExp('^(org\\.volt\\.|org\\.tizen\\.(?!browser$|netflix|primevideo$|globoplay)|org\\.tizen\\.netflixlowmem$|ise-|ug-|d75857a5-)' +
+      '|[Ss]ervice$|[Dd]aemon|Preview$|syspopup|[Hh]elper$|AdPlayer|AdSuite|[Kk]eyboard|\\.OTApp$' +
+      '|^com\\.samsung\\.(calendar-account-manager|tv\\.(cobalt-|aria-(dummy|engine)|airplay-app|ambient-support|' +
+      'built-in-app-info-viewer|commonsearch|searchall|preview-|tv-scheduler|csfs|notification-app|mycontents|' +
+      'safLaunchBridge|shortcut|remote-workspace|voiceassistant|mybixby|weather-viewer))');
+  var seletor = null;
+  var enterDown = false, enterLongo = false, enterTimer = null;
+
+  function abrirSeletor(slot) {
+    var lista = [];
+    for (var i = 0; i < instalados.length; i++) {
+      var a = instalados[i];
+      if (!a.id || !a.name || OCULTOS.test(a.id)) continue;
+      lista.push({ name: a.name, id: a.id });
+    }
+    lista.sort(function (x, y) { return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1; });
+    if (!lista.length) { aviso('Não consegui listar os apps desta TV'); return; }
+    lista.unshift({ name: 'Voltar ao padrão: ' + PADRAO[slot], id: '', padrao: true });
+    seletor = { slot: slot, lista: lista, i: 0 };
+    var raiz = document.getElementById('root');
+    var painel = document.createElement('div');
+    painel.id = 'seletor';
+    painel.style.cssText = 'position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(8,10,16,.99);z-index:20;overflow:hidden';
+    var t = document.createElement('div');
+    t.style.cssText = 'position:absolute;left:96px;top:60px;font-size:44px;font-weight:700';
+    t.textContent = 'Escolha o app da posição ' + (slot + 1);
+    var d = document.createElement('div');
+    d.style.cssText = 'position:absolute;left:96px;top:122px;font-size:24px;color:#9aa4b2';
+    d.textContent = 'Setas para andar, OK para escolher, Voltar para cancelar';
+    var grade = document.createElement('div');
+    grade.id = 'grade';
+    grade.style.cssText = 'position:absolute;left:96px;top:190px;width:1740px;height:840px;overflow:hidden';
+    var caixa = document.createElement('div');
+    caixa.id = 'caixa';
+    caixa.style.cssText = 'position:relative;display:flex;flex-wrap:wrap;transition:margin-top .2s ease';
+    lista.forEach(function (it, n) {
+      var b = el('div', 'btn tile', it.name);
+      b.style.cssText = 'width:272px;height:96px;margin:0 18px 18px 0;font-size:26px;font-weight:600;padding:0 14px;box-sizing:border-box;background:rgba(255,255,255,.1);border-radius:22px;flex:none;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden';
+      it.el = b;
+      caixa.appendChild(b);
+    });
+    grade.appendChild(caixa);
+    painel.appendChild(t); painel.appendChild(d); painel.appendChild(grade);
+    raiz.appendChild(painel);
+    pintarSeletor();
+  }
+
+  function pintarSeletor() {
+    seletor.lista.forEach(function (it, n) {
+      var f = n === seletor.i;
+      it.el.style.background = f ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.1)';
+      it.el.style.color = f ? '#10131a' : '#ffffff';
+      it.el.style.transform = f ? 'scale(1.06)' : 'none';
+    });
+    var linha = Math.floor(seletor.i / 6);
+    var visiveis = 7;
+    var topo = Math.max(0, linha - (visiveis - 2));
+    document.getElementById('caixa').style.marginTop = (-topo * 114) + 'px';
+  }
+
+  function fecharSeletor() {
+    var p = document.getElementById('seletor');
+    if (p) p.parentNode.removeChild(p);
+    seletor = null;
+  }
+
+  function escolherNoSeletor() {
+    var it = seletor.lista[seletor.i], slot = seletor.slot;
+    var novo = it.padrao ? novoApp(PADRAO[slot]) : novoApp(it.name, it.id);
+    apps[slot] = novo;
+    var b = els[2][slot];
+    b.textContent = novo.name;
+    b.style.background = 'linear-gradient(135deg,' + novo.a + ',' + novo.b + ')';
+    baixo[slot] = novo;
+    try { localStorage.setItem('frame.apps', JSON.stringify(apps.map(function (x) { return { name: x.name, id: x.id }; }))); } catch (e) {}
+    fecharSeletor();
+    draw();
+    aviso(it.padrao ? 'Voltou ao padrão' : 'Agora: ' + novo.name);
+  }
+
+  function teclaSeletor(k) {
+    var n = seletor.lista.length, i = seletor.i;
+    if (k === 39) i = Math.min(i + 1, n - 1);
+    else if (k === 37) i = Math.max(i - 1, 0);
+    else if (k === 40) i = Math.min(i + 6, n - 1);
+    else if (k === 38) i = Math.max(i - 6, 0);
+    else if (k === 13) { escolherNoSeletor(); return; }
+    else if (k === 10009 || k === 27) { fecharSeletor(); return; }
+    seletor.i = i;
+    pintarSeletor();
+  }
+
+  setInterval(carregarAgora, 60000);
+
   ajustar();
   relogio();
   draw();
+  carregarApps();
+  carregarAgora();
+  carregarColecoes();
 })();
 </script>
 </body>

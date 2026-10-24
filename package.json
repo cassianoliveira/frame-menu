@@ -1,9 +1,11 @@
 {
   "name": "frame-menu",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Menu estilo Apple TV para The Frame",
   "packageType": "app",
   "appName": "Menu Frame",
   "appPath": "index.html",
-  "keys": []
+  "keys": [
+    "ColorF2Yellow"
+  ]
 }
